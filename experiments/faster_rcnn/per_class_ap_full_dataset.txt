@@ -1,0 +1,12 @@
+Faster R-CNN (full training set): per-class COCO AP on the validation set.
+
+Building:
+  AP @ IoU=0.50:0.95 = 0.4766
+  AP @ IoU=0.50      = 0.7004
+  AP @ IoU=0.75      = 0.5451
+
+Small Vehicle:
+  AP @ IoU=0.50:0.95 = 0.5071
+  AP @ IoU=0.50      = 0.7729
+  AP @ IoU=0.75      = 0.6431
+
