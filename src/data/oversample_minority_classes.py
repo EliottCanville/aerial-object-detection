@@ -23,6 +23,7 @@ from src.utils import count_instances, list_images, load_class_names, read_yolo_
 MAJORITY_CLASSES = {1, 2, 6, 10}
 TARGET_INSTANCES = 500
 MAX_FACTOR = 50  # caps duplication of extremely rare classes (a handful of instances)
+DEFAULT_SUMMARY = Path("experiments/03_oversampled_14classes/oversampling_summary.json")
 
 
 def oversampling_factors(instances: dict[int, int]) -> dict[int, int]:
@@ -36,7 +37,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--src", type=Path, default=Path("data/active500_14cls"))
     parser.add_argument("--dst", type=Path, default=Path("data/oversampled_14cls"))
-    parser.add_argument("--summary", type=Path, default=Path("experiments/03_oversampled_14classes/oversampling_summary.json"))
+    parser.add_argument("--summary", type=Path, default=DEFAULT_SUMMARY)
     args = parser.parse_args()
 
     names = load_class_names()

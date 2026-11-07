@@ -173,7 +173,8 @@ def detection_examples_14cls(YOLO) -> None:
         result = model.predict(str(image_path), conf=0.4, verbose=False)[0]
         gt = draw_ground_truth(load_rgb(image_path), labels_dir / f"{image_path.stem}.txt", CLASS_NAMES_14, COLORS_14)
         pred = draw_predictions(load_rgb(image_path), result, CLASS_NAMES_14, COLORS_14, 0.35)
-        for ax, image, subtitle in [(axes[row, col], gt, "Ground truth"), (axes[row, col + 1], pred, "YOLO prediction")]:
+        panels = [(axes[row, col], gt, "Ground truth"), (axes[row, col + 1], pred, "YOLO prediction")]
+        for ax, image, subtitle in panels:
             ax.imshow(image)
             ax.set_title(subtitle, fontsize=10)
             ax.axis("off")
@@ -183,9 +184,11 @@ def detection_examples_14cls(YOLO) -> None:
 
 
 def main() -> None:
-    training_curves(EXP_DIR / "01_baseline_full_dataset/results.csv", "YOLO training metrics - full dataset (2 classes)",
+    training_curves(EXP_DIR / "01_baseline_full_dataset/results.csv",
+                    "YOLO training metrics - full dataset (2 classes)",
                     FIG_DIR / "01_baseline/yolo_training_curves.png")
-    training_curves(EXP_DIR / "03_oversampled_14classes/results.csv", "YOLO training metrics - 14 classes (oversampled)",
+    training_curves(EXP_DIR / "03_oversampled_14classes/results.csv",
+                    "YOLO training metrics - 14 classes (oversampled)",
                     FIG_DIR / "04_oversampled/yolo_14class_training_curves.png")
     copy_confusion_matrices()
     performance_comparison()

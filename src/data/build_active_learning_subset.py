@@ -47,7 +47,8 @@ def main() -> None:
             target.touch()  # background image
 
     instances, _ = count_instances(args.dst / "labels")
-    print(f"Subset written to {args.dst}: {sum(instances.values()):,} objects, per class {dict(sorted(instances.items()))}")
+    print(f"Subset written to {args.dst}: {sum(instances.values()):,} objects")
+    print(f"Instances per class: {dict(sorted(instances.items()))}")
 
 
 if __name__ == "__main__":
