@@ -1,13 +1,13 @@
 """Run a trained YOLOv8 model on images and save annotated predictions.
 
 Each output image gets a footer summarizing the detections per class.
-``--names`` relabels class ids with an external names file, which is needed for the
-14-class checkpoint: it was trained with a shifted names list (ids are correct,
-embedded names are not), see ``configs/classes.txt`` for the reference mapping.
+``--names`` relabels class ids with an external names file. It is only needed for the
+raw 14-class training checkpoint, which embeds a shifted names list (ids are correct);
+the released ``yolov8n_cadot_14cls_oversampled.pt`` already carries ``configs/classes.txt``.
 
 Usage:
-    python -m src.yolo.predict --weights experiments/03_oversampled_14classes/weights/best.pt \
-        --source data/cadot/valid/images --out runs/predict/14cls --names configs/classes.txt --limit 20
+    python -m src.yolo.predict --weights weights/yolov8n_cadot_14cls_oversampled.pt \
+        --source data/cadot/valid/images --out runs/predict/14cls --limit 20
 """
 
 import argparse

@@ -11,7 +11,7 @@ Output format (consumed by ``src.data.build_active_learning_subset``):
 
 Usage:
     python -m src.faster_rcnn.coreset_selection \
-        --checkpoint experiments/faster_rcnn/weights/fasterrcnn_binary_epoch10.pth \
+        --checkpoint weights/fasterrcnn_r50fpn_cadot_2cls_full.pth \
         --images-dir data/cadot_coco/valid --out experiments/02_active_learning_500/coreset_ranking.json
 """
 
