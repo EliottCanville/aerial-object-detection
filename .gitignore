@@ -20,6 +20,7 @@ venv/
 *.onnx
 *.engine
 /runs/
+/weights/
 
 # --- Cluster job logs -------------------------------------------------------
 *.out

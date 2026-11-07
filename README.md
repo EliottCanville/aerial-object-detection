@@ -4,6 +4,7 @@
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.x-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
 [![Ultralytics](https://img.shields.io/badge/Ultralytics-YOLOv8-111F68)](https://docs.ultralytics.com/)
 [![Report](https://img.shields.io/badge/report-PDF-B31B1B)](report.pdf)
+[![Models](https://img.shields.io/badge/models-v1.0.0-2EA44F)](https://github.com/EliottCanville/aerial-object-detection/releases/tag/v1.0.0)
 
 We benchmark a one-stage detector (**YOLOv8**) against a two-stage detector (**Faster R-CNN**, ResNet-50 + FPN) on
 [CADOT](https://cadot.onrender.com/), the dense urban aerial dataset of the IEEE ICIP 2025 Grand Challenge
@@ -44,6 +45,35 @@ Validation-set mAP (%), IoU 0.50 / 0.50:0.95.
   <img src="docs/figures/detections_14classes.jpg" width="100%" alt="14-class detections">
   <br><em>14-class model on validation tiles: ground truth (left) vs prediction (right).</em>
 </p>
+
+## Pretrained models
+
+All trained checkpoints are published in the [**v1.0.0 release**](https://github.com/EliottCanville/aerial-object-detection/releases/tag/v1.0.0)
+(checksums in `SHA256SUMS.txt`).
+
+| Model | Experiment | Classes | mAP50 | File | Size |
+|---|---|:---:|:---:|---|---:|
+| YOLOv8n | 01 · Full dataset | 2 | 87.7 | `yolov8n_cadot_2cls_full.pt` | 6 MB |
+| YOLOv8n | 02 · Active learning | 2 | 87.7 | `yolov8n_cadot_2cls_active500.pt` | 6 MB |
+| YOLOv8n | 03 · Oversampled | 14 | 73.9 | `yolov8n_cadot_14cls_oversampled.pt` | 6 MB |
+| Faster R-CNN R50-FPN | 01 · Full dataset | 2 | 73.7 | `fasterrcnn_r50fpn_cadot_2cls_full.pth` | 166 MB |
+| Faster R-CNN R50-FPN | 02 · Active learning | 2 | 69.4 | `fasterrcnn_r50fpn_cadot_2cls_active500.pth` | 166 MB |
+
+Quick test on your own images (the models expect nadir aerial tiles at about 20 cm/pixel, as in CADOT):
+
+```bash
+pip install -r requirements.txt
+mkdir -p weights && cd weights
+curl -LO https://github.com/EliottCanville/aerial-object-detection/releases/download/v1.0.0/yolov8n_cadot_14cls_oversampled.pt
+curl -LO https://github.com/EliottCanville/aerial-object-detection/releases/download/v1.0.0/fasterrcnn_r50fpn_cadot_2cls_full.pth
+cd ..
+
+python -m src.yolo.predict --weights weights/yolov8n_cadot_14cls_oversampled.pt --source path/to/images --out runs/predict/yolo
+python -m src.faster_rcnn.predict --weights weights/fasterrcnn_r50fpn_cadot_2cls_full.pth --source path/to/images --out runs/predict/frcnn
+```
+
+The YOLO checkpoints are standard Ultralytics files: `YOLO("weights/yolov8n_cadot_14cls_oversampled.pt")` or
+`yolo predict model=... source=...` work as well.
 
 ## Dataset
 
@@ -92,7 +122,7 @@ data/
 ├── src/
 │   ├── data/                    # label filtering, core-set subset, oversampling, class statistics
 │   ├── yolo/                    # training (config-driven) and inference
-│   ├── faster_rcnn/             # dataset, training, k-Center Greedy core-set selection
+│   ├── faster_rcnn/             # dataset, training, inference, k-Center Greedy core-set selection
 │   └── analysis/                # training curves, run comparison, report figures
 ├── cluster/gricad/              # OAR job scripts for the GRICAD GPU cluster
 ├── experiments/                 # versioned results: metrics, curves, confusion matrices, args
@@ -104,7 +134,7 @@ data/
 └── report.pdf                   # final report
 ```
 
-Trained weights are not tracked by git; they are expected under `experiments/<run>/weights/`.
+Trained weights are not tracked by git: download them from the [release](#pretrained-models) into `weights/`.
 
 ## Getting started
 
@@ -125,7 +155,7 @@ python -m src.data.filter_labels --src data/cadot --dst data/cadot_2cls
 
 # Core-set ranking from Faster R-CNN backbone features (the ranking used in the report is versioned)
 python -m src.faster_rcnn.coreset_selection \
-    --checkpoint experiments/faster_rcnn/weights/fasterrcnn_binary_epoch10.pth \
+    --checkpoint weights/fasterrcnn_r50fpn_cadot_2cls_full.pth \
     --images-dir data/cadot_coco/valid --out experiments/02_active_learning_500/coreset_ranking.json
 
 # 500-image subsets, then minority-class oversampling for the 14-class experiment
@@ -160,9 +190,9 @@ oarsub -S "./cluster/gricad/train.oar.sh configs/experiments/03_oversampled_14cl
 ### 3. Inference and analysis
 
 ```bash
-# Annotated predictions (--names fixes the class names embedded in the 14-class checkpoint)
-python -m src.yolo.predict --weights experiments/03_oversampled_14classes/weights/best.pt \
-    --source data/cadot/test/images --out runs/predict/14cls --names configs/classes.txt
+# Annotated predictions on the test split
+python -m src.yolo.predict --weights weights/yolov8n_cadot_14cls_oversampled.pt \
+    --source data/cadot/test/images --out runs/predict/14cls
 
 # Training curves, run comparison, report figures (written to report/figures/)
 python -m src.analysis.plot_training --results experiments/01_baseline_full_dataset/results.csv --out runs/plots/01
