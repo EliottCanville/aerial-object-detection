@@ -1,0 +1,25 @@
+name: Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Ruff
+        run: |
+          pip install ruff==0.17.4
+          ruff check .
+
+      # Info-level notes (sourced cluster files, client-side expansion) are intended.
+      - name: ShellCheck
+        run: shellcheck --severity=warning cluster/gricad/*.sh
