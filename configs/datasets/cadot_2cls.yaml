@@ -1,0 +1,10 @@
+# CADOT restricted to the two dominant classes (labels produced by src/data/filter_labels.py).
+# Paths are relative to the repository root: run training from there.
+path: data
+train: cadot_2cls/train/images
+val: cadot_2cls/valid/images
+test: cadot_2cls/test/images
+
+names:
+  0: building
+  1: small vehicle

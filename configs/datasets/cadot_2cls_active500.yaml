@@ -1,0 +1,10 @@
+# 500-image core-set subset (src/data/build_active_learning_subset.py), 2 classes.
+# Evaluated on the same validation split as the full-dataset baseline.
+path: data
+train: active500_2cls/images
+val: cadot_2cls/valid/images
+test: cadot_2cls/test/images
+
+names:
+  0: building
+  1: small vehicle

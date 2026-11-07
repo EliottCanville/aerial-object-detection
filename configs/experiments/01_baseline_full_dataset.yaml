@@ -1,0 +1,10 @@
+# Experiment 01: YOLOv8n trained on the full training split (3234 images), 2 classes.
+model: yolov8n.pt
+data: configs/datasets/cadot_2cls.yaml
+project: runs
+name: 01_baseline_full_dataset
+exist_ok: true
+
+epochs: 50
+imgsz: 640
+batch: 16

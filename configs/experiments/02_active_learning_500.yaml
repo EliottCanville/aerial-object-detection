@@ -1,0 +1,25 @@
+# Experiment 02: YOLOv8n trained on 500 images selected by k-Center Greedy, 2 classes.
+# Augmentation is slightly more aggressive than the defaults to compensate for the smaller set.
+model: yolov8n.pt
+data: configs/datasets/cadot_2cls_active500.yaml
+project: runs
+name: 02_active_learning_500
+exist_ok: true
+
+epochs: 50
+imgsz: 640
+batch: 16
+
+hsv_h: 0.015
+hsv_s: 0.7
+hsv_v: 0.4
+degrees: 10.0
+translate: 0.1
+scale: 0.5
+shear: 0.0
+perspective: 0.0
+flipud: 0.0
+fliplr: 0.5
+mosaic: 1.0
+mixup: 0.1
+copy_paste: 0.1

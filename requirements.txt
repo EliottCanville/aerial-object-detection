@@ -1,0 +1,13 @@
+# Core
+torch>=2.1
+torchvision>=0.16
+ultralytics>=8.3
+
+# Data handling and figures
+numpy
+pandas
+matplotlib
+opencv-python
+pillow
+pyyaml
+tqdm

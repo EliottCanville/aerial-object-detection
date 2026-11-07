@@ -1,0 +1,34 @@
+# --- OS / editors -----------------------------------------------------------
+.DS_Store
+.vscode/
+.idea/
+
+# --- Python ----------------------------------------------------------------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.ipynb_checkpoints/
+
+# --- Dataset (CADOT is not redistributed, see README) ----------------------
+/data/
+
+# --- Model weights and training outputs -------------------------------------
+*.pt
+*.pth
+*.onnx
+*.engine
+/runs/
+
+# --- Cluster job logs -------------------------------------------------------
+*.out
+*.err
+OAR.*
+
+# --- Report sources: only report.pdf (repository root) is versioned ---------
+/report/
+
+# --- Local notes and tooling ------------------------------------------------
+/notes/
+/.claude/
